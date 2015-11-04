@@ -1,0 +1,44 @@
+#!/bin/bash
+ROOTFS="rootfs"
+mkdir -p rootfs
+
+PACKAGES="ca-certificates ssh locales firmware-realtek wicd-curses vim less cpufrequtils raspberrypi-bootloader
+	  mtr-tiny dstat htop aptitude dvtm dtach strace ltrace"
+
+qemu-debootstrap --arch=armhf \
+		 --variant=minbase \
+		 jessie \
+		 "$ROOTFS" \
+	         "http://ftp.cn.debian.org/debian/"
+
+
+echo "root passwd"
+chroot "$ROOTFS" /bin/sh -c "echo root:root| chpasswd"
+
+echo "gpg key"
+cp raspberrypi.gpg.key $ROOTFS/
+chroot "$ROOTFS" apt-key add raspberrypi.gpg.key
+rm $ROOTFS/raspberrypi.gpg.key
+
+echo "sources.list"
+cp sources.list $ROOTFS/etc/apt/sources.list
+
+echo "install package"
+chroot "$ROOTFS" apt-get update
+chroot "$ROOTFS" apt-get -y install $PACKAGES
+chroot "$ROOTFS" apt-get clean
+
+echo "rasp start config"
+cp config.txt cmdline.txt $ROOTFS/boot/
+
+echo "network"
+cp interfaces $ROOTFS/etc/network/
+
+echo "fstab"
+cp fstab $ROOTFS/etc/
+
+echo "rm qemu"
+rm $ROOTFS/usr/bin/qemu-arm-static
+
+echo "compress"
+tar -acf $ROOTFS.tar.bz2 $ROOTFS
