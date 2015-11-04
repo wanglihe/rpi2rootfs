@@ -7,7 +7,7 @@ PACKAGES="ca-certificates ssh locales firmware-realtek wicd-curses vim less cpuf
 
 qemu-debootstrap --arch=armhf \
 		 --variant=minbase \
-		 jessie \
+		 stable \
 		 "$ROOTFS" \
 	         "http://ftp.cn.debian.org/debian/"
 
@@ -16,7 +16,7 @@ echo "root passwd"
 chroot "$ROOTFS" /bin/sh -c "echo root:root| chpasswd"
 
 echo "gpg key"
-cp raspberrypi.gpg.key $ROOTFS/
+wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key -O $ROOTFS/raspberrypi.gpg.key
 chroot "$ROOTFS" apt-key add raspberrypi.gpg.key
 rm $ROOTFS/raspberrypi.gpg.key
 
