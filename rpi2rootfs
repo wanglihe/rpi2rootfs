@@ -1,9 +1,7 @@
 #!/bin/bash
 ROOTFS="rootfs"
 mkdir -p rootfs
-
-PACKAGES="ca-certificates ssh locales firmware-realtek wicd-curses vim less cpufrequtils raspberrypi-bootloader
-	  mtr-tiny dstat htop aptitude dvtm dtach strace ltrace"
+source packages
 
 qemu-debootstrap --arch=armhf \
 		 --variant=minbase \
@@ -25,7 +23,7 @@ cp sources.list $ROOTFS/etc/apt/sources.list
 
 echo "install package"
 chroot "$ROOTFS" apt-get update
-chroot "$ROOTFS" apt-get -y install $PACKAGES
+chroot "$ROOTFS" apt-get -y install ${PACKAGES[@]}
 chroot "$ROOTFS" apt-get clean
 
 echo "rasp start config"

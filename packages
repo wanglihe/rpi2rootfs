@@ -1,0 +1,31 @@
+
+PACKAGES=()
+
+#raspberry pi office bootloader and drivers
+PACKAGES+=(raspberrypi-bootloader)
+PACKAGES+=(firmware-realtek)
+
+# security
+PACKAGES+=(ca-certificates)
+PACKAGES+=(ssh)
+
+# base config
+PACKAGES+=(locales )
+PACKAGES+=(wicd-curses)
+
+# hardware tools
+PACKAGES+=(cpufrequtils)
+
+# useful tools
+PACKAGES+=(vim)
+PACKAGES+=(less)
+PACKAGES+=(mtr-tiny)
+PACKAGES+=(dstat)
+PACKAGES+=(htop)
+PACKAGES+=(aptitude)
+PACKAGES+=(dvtm)
+PACKAGES+=(dtach)
+PACKAGES+=(strace)
+PACKAGES+=(ltrace)
+
+# others
