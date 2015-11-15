@@ -1,0 +1,2 @@
+deb http://BASE_URL/debian/ stable main
+deb http://RPI_URL/debian/ stable main

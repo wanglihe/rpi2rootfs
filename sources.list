@@ -1,3 +1,0 @@
-deb http://ftp.cn.debian.org/debian jessie main
-#deb http://archive.raspberrypi.org/debian/ jessie main
-deb http://mirrors.ustc.edu.cn/archive.raspberrypi.org/debian/ jessie main

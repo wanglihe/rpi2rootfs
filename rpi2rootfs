@@ -3,13 +3,14 @@ ROOTFS="rootfs"
 mkdir -p rootfs
 source packages
 
-QEMU_MIRROR=$(grep -v "#" mirrors.base|head -n 1)
+MIRROR_BASE=$(grep -v "#" mirrors.base| head -n 1)
+MIRROR_RPI=$(grep -v "#" mirrors.raspberrypi| head -n 1)
 
 qemu-debootstrap --arch=armhf \
 		 --variant=minbase \
 		 stable \
 		 "$ROOTFS" \
-	         "$QEMU_MIRROR"
+	         "$MIRROR_BASE"
 
 
 echo "root passwd"
@@ -21,6 +22,9 @@ chroot "$ROOTFS" apt-key add raspberrypi.gpg.key
 rm $ROOTFS/raspberrypi.gpg.key
 
 echo "sources.list"
+cp sources.list.template sources.list
+sed -i -e "s/BASE_URL/$MIRROR_BASE/g" sources.list
+sed -i -e "s/RPI_URL/$MIRROR_RPI/g" sources.list
 cp sources.list $ROOTFS/etc/apt/sources.list
 
 echo "install package"
