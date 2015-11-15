@@ -3,11 +3,13 @@ ROOTFS="rootfs"
 mkdir -p rootfs
 source packages
 
+QEMU_MIRROR=$(grep -v "#" mirrors.base|head -n 1)
+
 qemu-debootstrap --arch=armhf \
 		 --variant=minbase \
 		 stable \
 		 "$ROOTFS" \
-	         "http://ftp.cn.debian.org/debian/"
+	         "$QEMU_MIRROR"
 
 
 echo "root passwd"
