@@ -41,6 +41,9 @@ cp interfaces $ROOTFS/etc/network/
 echo "fstab"
 cp fstab $ROOTFS/etc/
 
+echo "ssh"
+cp sshd_config $ROOTFS/etc/ssh/
+
 echo "rm qemu"
 rm $ROOTFS/usr/bin/qemu-arm-static
 

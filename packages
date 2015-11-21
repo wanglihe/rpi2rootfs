@@ -1,8 +1,10 @@
 
 PACKAGES=()
 
-#raspberry pi office bootloader and drivers
+# raspberry pi official bootloader 
 PACKAGES+=(raspberrypi-bootloader)
+
+# drivers
 PACKAGES+=(firmware-realtek)
 
 # security
@@ -10,7 +12,7 @@ PACKAGES+=(ca-certificates)
 PACKAGES+=(ssh)
 
 # base config
-PACKAGES+=(locales )
+PACKAGES+=(locales)
 PACKAGES+=(wicd-curses)
 
 # hardware tools
