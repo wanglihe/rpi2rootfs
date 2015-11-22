@@ -25,8 +25,8 @@ rm $ROOTFS/raspberrypi.gpg.key
 
 status "sources.list"
 cp sources.list.template sources.list
-sed -i -e "s/BASE_URL/$MIRROR_BASE/g" sources.list
-sed -i -e "s/RPI_URL/$MIRROR_RPI/g" sources.list
+sed -i -e "s|BASE_URL|$MIRROR_BASE|g" sources.list
+sed -i -e "s|RPI_URL|$MIRROR_RPI|g" sources.list
 cp sources.list $ROOTFS/etc/apt/sources.list
 
 status "install package"
