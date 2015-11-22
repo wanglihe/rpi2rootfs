@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ $# != 2 ]; then
+    echo "$0 <image> <rootfs>"
+    exit 1
+fi
+
+IMAGE=$1
+ROOTFS=$2
+DISK=$(losetup -f)
+IMAGEDIR=imagetmp
+
+losetup -P $DISK $IMAGE
+
+mkfs.vfat ${DISK}p1
+mkfs.ext4 -F ${DISK}p2
+
+mkdir $IMAGEDIR
+mount ${DISK}p2 $IMAGEDIR
+mkdir $IMAGEDIR/boot
+mount ${DISK}p1 $IMAGEDIR/boot
+
+rsync -a $ROOTFS/ $IMAGEDIR
+
+umount ${DISK}p1
+umount ${DISK}p2
+
+rm -rf $IMAGEDIR
+
+losetup -d $DISK
+
+echo "compress"
+tar -acf $IMAGE.tar.bz2 $IMAGE
