@@ -1,14 +1,34 @@
 #!/bin/bash
 
-if [ $# != 2 ]; then
-    echo "$0 <image> <rootfs>"
-    exit 1
-fi
+source rpi.inc
 
-IMAGE=$1
-ROOTFS=$2
+IMAGE=rpi.img
 DISK=$(losetup -f)
 IMAGEDIR=imagetmp
+
+rm -rf $IMAGE.*
+
+status "generate image"
+
+fallocate -l 1G $IMAGE
+fdisk $IMAGE <<EOF
+o
+n
+p
+
+
++64M
+t
+c
+n
+p
+
+
+
+w
+EOF
+
+status "copy files to image"
 
 losetup -P $DISK $IMAGE
 
@@ -29,5 +49,5 @@ rm -rf $IMAGEDIR
 
 losetup -d $DISK
 
-echo "compress"
+status "compress image"
 tar -acf $IMAGE.tar.bz2 $IMAGE

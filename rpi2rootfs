@@ -1,7 +1,10 @@
 #!/bin/bash
-ROOTFS="rootfs"
-mkdir -p rootfs
+
+source rpi.inc
+
+mkdir -p $ROOTFS
 source packages
+PACKAGES=${PACKAGES[@]}
 
 MIRROR_BASE=$(grep -v "#" mirrors.base| head -n 1)
 MIRROR_RPI=$(grep -v "#" mirrors.raspberrypi| head -n 1)
@@ -10,46 +13,45 @@ qemu-debootstrap --arch=armhf \
 		 --variant=minbase \
 		 stable \
 		 "$ROOTFS" \
-	         "$MIRROR_BASE"
+	         "http://$MIRROR_BASE/debian"
 
-
-echo "root passwd"
+status "root passwd"
 chroot "$ROOTFS" /bin/sh -c "echo root:root| chpasswd"
 
-echo "gpg key"
+status "gpg key"
 wget http://archive.raspberrypi.org/debian/raspberrypi.gpg.key -O $ROOTFS/raspberrypi.gpg.key
 chroot "$ROOTFS" apt-key add raspberrypi.gpg.key
 rm $ROOTFS/raspberrypi.gpg.key
 
-echo "sources.list"
+status "sources.list"
 cp sources.list.template sources.list
 sed -i -e "s/BASE_URL/$MIRROR_BASE/g" sources.list
 sed -i -e "s/RPI_URL/$MIRROR_RPI/g" sources.list
 cp sources.list $ROOTFS/etc/apt/sources.list
 
-echo "install package"
-chroot "$ROOTFS" /bin/sh -c "DEBIAN_FRONTEND=noninteractive apt-get update"
-chroot "$ROOTFS" /bin/sh -c "DEBIAN_FRONTEND=noninteractive apt-get -y install ${PACKAGES[@]}"
-chroot "$ROOTFS" /bin/sh -c "DEBIAN_FRONTEND=noninteractive apt-get clean"
+status "install package"
+chroot "$ROOTFS" /bin/bash -c "DEBIAN_FRONTEND=noninteractive apt-get update"
+chroot "$ROOTFS" /bin/bash -c "DEBIAN_FRONTEND=noninteractive apt-get -y install $PACKAGES"
+chroot "$ROOTFS" /bin/bash -c "DEBIAN_FRONTEND=noninteractive apt-get clean"
 
-echo "rasp start config"
+status "rasp start config"
 cp config.txt cmdline.txt $ROOTFS/boot/
 
-echo "network"
+status "network"
 cp interfaces $ROOTFS/etc/network/
 
-echo "fstab"
+status "fstab"
 cp fstab $ROOTFS/etc/
 
-echo "ssh"
+status "ssh"
 cp sshd_config $ROOTFS/etc/ssh/
 
-echo "time"
+status "time"
 chroot "$ROOTFS" systemctl enable systemd-timesyncd
 chroot "$ROOTFS" systemctl disable hwclock-save
 
-echo "rm qemu"
+status "rm qemu"
 rm $ROOTFS/usr/bin/qemu-arm-static
 
-echo "compress"
-tar -acf $ROOTFS.tar.bz2 $ROOTFS
+#status "compress"
+#tar -acf $ROOTFS.tar.bz2 $ROOTFS
