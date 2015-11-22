@@ -28,9 +28,9 @@ sed -i -e "s/RPI_URL/$MIRROR_RPI/g" sources.list
 cp sources.list $ROOTFS/etc/apt/sources.list
 
 echo "install package"
-chroot "$ROOTFS" apt-get update
-chroot "$ROOTFS" apt-get -y install ${PACKAGES[@]}
-chroot "$ROOTFS" apt-get clean
+chroot "$ROOTFS" /bin/sh -c "DEBIAN_FRONTEND=noninteractive apt-get update"
+chroot "$ROOTFS" /bin/sh -c "DEBIAN_FRONTEND=noninteractive apt-get -y install ${PACKAGES[@]}"
+chroot "$ROOTFS" /bin/sh -c "DEBIAN_FRONTEND=noninteractive apt-get clean"
 
 echo "rasp start config"
 cp config.txt cmdline.txt $ROOTFS/boot/
