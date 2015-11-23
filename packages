@@ -16,6 +16,7 @@ PACKAGES+=(locales)
 PACKAGES+=(wicd-curses)
 
 # hardware tools
+PACKAGES+=(kmod)
 PACKAGES+=(cpufrequtils)
 
 # useful tools
