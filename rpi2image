@@ -9,8 +9,8 @@ IMAGEDIR=imagetmp
 rm -rf $IMAGE.*
 
 status "generate image"
-
-fallocate -l 1G $IMAGE
+# 1000**3/(1024**3) = 0.931 -> 931M for tf card 1G space
+fallocate -l 931M $IMAGE
 fdisk $IMAGE <<EOF
 o
 n
