@@ -25,7 +25,7 @@ step 3: run command ./rpi2rootfs, it make a "rootfs", which is the root of new s
 
 step 4: run command ./rpi2image, it makes a 1G image, rpi.img. You can write it to the TF card. If you generate these on your remote server, download the rpi.img.tar.bz2 (yes, no need tar, bzip2 can compress directly, but bzip2 has bugs on read file alloced by tool fallocate), it is the same file but smaller.
 
-step 5: write image to TF card, you should google it for the detail, or just read the guide of raspbian or NOOBS from raspberry pi official website, but the most important line is: pv &lt;rpi.img &gt;/dev/sdX, X is the device of you TF card. The TF catd's space more than 1G is enough. When it finished, use tool resize2fs to expand partition 2 to the whole TF card if you want. 
+step 5: write image to TF card, you should google it for the detail, or just read the guide of raspbian or NOOBS from raspberry pi official website, but the most important line is: pv &lt;rpi.img &gt;/dev/sdX, X is the device of you TF card. The TF card's space more than 1G is enough. When it finished, use tool resize2fs to expand partition 2 to the whole TF card if you want. 
 
 step 6: put TF card into raspberry pi, power on. You can login with root:root. It default support wired network and dhcp, so you can also login through ssh if you can get the ip address.
 
